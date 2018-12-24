@@ -1,0 +1,11 @@
+[package]
+name = "nspire-sys"
+version = "0.1.0"
+authors = ["coolreader18 <33094578+coolreader18@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+
+[build-dependencies]
+bindgen = "0.45"
+cc = "1.0"

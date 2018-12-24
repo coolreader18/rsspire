@@ -1,0 +1,14 @@
+[package]
+name = "rsspire"
+version = "0.1.0"
+authors = ["coolreader18 <33094578+coolreader18@users.noreply.github.com>"]
+edition = "2018"
+license = "MIT"
+
+[workspace]
+members = [".", "nspire-sys"]
+
+[dependencies]
+nspire-sys = { path = "nspire-sys" }
+cstr_core = { version = "0.1.2" }
+memchr = { version = "2.0", default-features = false }

@@ -1,0 +1,8 @@
+[build]
+target = "arm-unknown-linux-gnueabi"
+
+[target.arm-unknown-linux-gnueabi]
+linker = "nspire-gcc"
+rustflags = [
+  "-C", "link-arg=-N",
+]
