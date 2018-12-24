@@ -10,8 +10,8 @@
 
 #[macro_use]
 extern crate alloc;
-// extern crate cstr_core;
-// extern crate memchr;
+extern crate cstr_core;
+extern crate memchr;
 
 extern crate nspire_sys as sys;
 mod global_allocator;
@@ -23,7 +23,7 @@ pub mod prelude {
   pub use crate::ToCChar;
   pub use alloc::prelude::*;
   pub use alloc::str::FromStr;
-  // pub use cstr_core::CStr;
+  pub use cstr_core::CStr;
 }
 use self::prelude::*;
 use alloc::str;
