@@ -69,12 +69,7 @@ fn main(_argc: isize, _argv: *const *const u8) -> isize {
     let mut ptr = core::ptr::null_mut::<libc::c_char>();
     unsafe {
       // sys::exit(1);
-      sys::show_msg_user_input(
-        b"a\0".as_ptr() as *const i8,
-        b"b\0".as_ptr() as *const i8,
-        b"c\0".as_ptr() as *const i8,
-        &mut ptr,
-      );
+      sys::show_msg_user_input(b"a\0".as_ptr(), b"b\0".as_ptr(), b"c\0".as_ptr(), &mut ptr);
     }
     vec.push(ptr);
     let mut i = 5;
@@ -95,12 +90,7 @@ fn main(_argc: isize, _argv: *const *const u8) -> isize {
   }
   for a in vec {
     unsafe {
-      sys::_show_msgbox(
-        b"hey\0".as_ptr() as *const i8,
-        a,
-        1,
-        b"k\0".as_ptr() as *const i8,
-      );
+      sys::_show_msgbox(b"hey\0".as_ptr(), a, 1, b"k\0".as_ptr());
     }
   }
   0
