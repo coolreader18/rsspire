@@ -5,7 +5,6 @@ authors = ["coolreader18 <33094578+coolreader18@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
-cty = "0.1.5"
 
 [build-dependencies]
 bindgen = "0.45"

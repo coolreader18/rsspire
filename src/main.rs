@@ -10,20 +10,18 @@
 
 #[macro_use]
 extern crate alloc;
-// extern crate cstr_core;
-// extern crate memchr;
 
 extern crate nspire_sys as sys;
+mod cstr;
 mod global_allocator;
 
 use core::panic::PanicInfo;
 pub use sys::libc;
 
 pub mod prelude {
-  pub use crate::ToCChar;
+  pub use crate::cstr::*;
   pub use alloc::prelude::*;
   pub use alloc::str::FromStr;
-  // pub use cstr_core::CStr;
 }
 use self::prelude::*;
 use alloc::str;
@@ -31,67 +29,33 @@ use alloc::str;
 #[global_allocator]
 static GLOBAL: global_allocator::NspireAlloc = global_allocator::NspireAlloc;
 
-pub trait ToCChar {
-  fn to_c_char(&self) -> *mut libc::c_char;
-}
-
-impl ToCChar for str {
-  fn to_c_char(&self) -> *mut libc::c_char {
-    let mut bytes = self.to_string().into_bytes();
-    bytes.push(b'\0');
-    bytes
-      .into_iter()
-      .map(|b| b as libc::c_char)
-      .collect::<Vec<_>>()
-      .as_mut_ptr()
-  }
-}
-impl ToCChar for String {
-  fn to_c_char(&self) -> *mut libc::c_char {
-    let mut bytes = self.clone().into_bytes();
-    bytes.push(b'\0');
-    bytes
-      .into_iter()
-      .map(|b| b as libc::c_char)
-      .collect::<Vec<_>>()
-      .as_mut_ptr()
+fn show_msg_user_input(title: &str, msg: &str, default: &str) -> String {
+  cstr!(title, msg, default);
+  let mut ptr = core::ptr::null_mut();
+  unsafe {
+    sys::show_msg_user_input(title, msg, default, &mut ptr);
+    ptr_to_string(ptr)
   }
 }
 
-// impl From<String> for *mut libc::c_char {}
+fn show_msgbox(title: &str, msg: &str, button: &str) {
+  cstr!(title, msg, button);
+
+  unsafe {
+    sys::_show_msgbox(title, msg, 1, button);
+  }
+}
 
 #[start]
 fn main(_argc: isize, _argv: *const *const u8) -> isize {
-  let mut c = 0;
-  let mut vec = vec![];
-  let mut string = String::new();
-  loop {
-    let mut ptr = core::ptr::null_mut::<libc::c_char>();
-    unsafe {
-      // sys::exit(1);
-      sys::show_msg_user_input(b"a\0".as_ptr(), b"b\0".as_ptr(), b"c\0".as_ptr(), &mut ptr);
-    }
-    vec.push(ptr);
-    let mut i = 5;
-    loop {
-      unsafe {
-        let c = *ptr.offset(i) as u8;
-        if c == b'\0' {
-          break;
-        }
-        string.push(c as char);
-      }
-      i += 1;
-    }
-    c += 1;
-    if c == 5 {
-      break;
-    }
+  let mut vec = Vec::new();
+  for c in 1..5 {
+    let response = show_msg_user_input("hey", &format!("number {}", c), "ya");
+
+    vec.push(response);
   }
   for a in vec {
-    unsafe {
-      sys::_show_msgbox(b"hey\0".as_ptr(), a, 1, b"k\0".as_ptr());
-    }
+    show_msgbox("look what you did", &a, "k");
   }
   0
 }

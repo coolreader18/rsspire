@@ -10,5 +10,3 @@ members = [".", "nspire-sys"]
 
 [dependencies]
 nspire-sys = { path = "nspire-sys" }
-cstr_core = { version = "0.1.2" }
-memchr = { version = "2.0", default-features = false }
